@@ -62,8 +62,8 @@ public class FileSyncSettings implements PersistentStateComponent<Element> {
         try {
             LOGGER.info("Loading state");
 
-            for (Element projetcts : (List<Element>) element.getChildren(ELEMENT_PROJECTS)) {
-                for (Object object : projetcts.getChildren(ELEMENT_PROJECT)) {
+            for (Element projetc : (List<Element>) element.getChildren(ELEMENT_PROJECTS)) {
+                for (Object object : projetc.getChildren(ELEMENT_PROJECT)) {
                     Element elt = (Element) object;
                     String name = elt.getAttributeValue(ELEMENT_PRJ_NAME);
                     String source = elt.getAttributeValue(ELEMENT_PRJ_SOURCE);
