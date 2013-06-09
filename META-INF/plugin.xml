@@ -30,13 +30,20 @@
 
   <project-components>
     <!-- Add your project components here -->
+      <component>
+          <implementation-class>org.filesync.idea.plugin.FileSyncPlugin</implementation-class>
+          <option name="workspace" value="true"/>
+      </component>
   </project-components>
 
   <actions>
-    <!-- Add your actions here -->
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
+      <applicationService serviceInterface="org.filesync.idea.plugin.settings.FileSyncSettings"
+                      serviceImplementation="org.filesync.idea.plugin.settings.FileSyncSettings">
+      </applicationService>
+
+      <applicationConfigurable implementation="org.filesync.idea.plugin.ui.FileSyncConfiguration"></applicationConfigurable>
   </extensions>
 </idea-plugin>
