@@ -28,7 +28,7 @@ public class FilesSynchronyzer {
                 List<Project> projects = FileSyncSettings.getInstance().getProjects();
                 for (Project project : projects) {
                     // TODO finish proper sync checking paths.
-                    progressIndicator.setText("Synchronizing " + project.getName() + "...");
+                    progressIndicator.setText("Synchronizing " + project.getSource() + "...");
                     doSync(project);
                 }
             }

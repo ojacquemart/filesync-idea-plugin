@@ -21,7 +21,6 @@ public class FileSyncSettings implements PersistentStateComponent<Element> {
     private static final String ELEMENT_ROOT = "ROOT";
     private static final String ELEMENT_PROJECTS = "PROJECTS";
     private static final String ELEMENT_PROJECT = "PROJECT";
-    private static final String ELEMENT_PRJ_NAME = "NAME";
     private static final String ELEMENT_PRJ_SOURCE = "SOURCE";
     private static final String ELEMENT_PRJ_TARGET = "TARGET";
 
@@ -39,11 +38,10 @@ public class FileSyncSettings implements PersistentStateComponent<Element> {
         try {
             Element eltDirectories = new Element(ELEMENT_PROJECTS);
             for (Project directory : projects) {
-                if (directory.getName() != null) {
+                if (directory.getSource() != null) {
                     LOGGER.info("Adding " + directory);
 
                     Element eltDir = new Element(ELEMENT_PROJECT);
-                    eltDir.setAttribute(ELEMENT_PRJ_NAME, directory.getName());
                     eltDir.setAttribute(ELEMENT_PRJ_SOURCE, directory.getSource());
                     eltDir.setAttribute(ELEMENT_PRJ_TARGET, directory.getTarget());
 
@@ -62,13 +60,12 @@ public class FileSyncSettings implements PersistentStateComponent<Element> {
         try {
             LOGGER.info("Loading state");
 
-            for (Element projetc : (List<Element>) element.getChildren(ELEMENT_PROJECTS)) {
-                for (Object object : projetc.getChildren(ELEMENT_PROJECT)) {
+            for (Element project : (List<Element>) element.getChildren(ELEMENT_PROJECTS)) {
+                for (Object object : project.getChildren(ELEMENT_PROJECT)) {
                     Element elt = (Element) object;
-                    String name = elt.getAttributeValue(ELEMENT_PRJ_NAME);
                     String source = elt.getAttributeValue(ELEMENT_PRJ_SOURCE);
                     String target = elt.getAttributeValue(ELEMENT_PRJ_TARGET);
-                    addProject(name, source, target);
+                    addProject(source, target);
                 }
             }
         }
@@ -78,10 +75,10 @@ public class FileSyncSettings implements PersistentStateComponent<Element> {
     }
 
 
-    private void addProject(String name, String source, String target) {
+    private void addProject(String source, String target) {
         LOGGER.info("Adding dir source " + source + " and target " + target);
 
-        projects.add(new Project(name, source, target));
+        projects.add(new Project(source, target));
     }
 
     public List<Project> getProjects() {

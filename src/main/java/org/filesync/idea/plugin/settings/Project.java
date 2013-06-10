@@ -1,12 +1,10 @@
 package org.filesync.idea.plugin.settings;
 
 public class Project {
-    private String name;
     private String source;
     private String target;
 
-    public Project(String name, String source, String target) {
-        this.name = name;
+    public Project(String source, String target) {
         this.source = source;
         this.target = target;
     }
@@ -19,17 +17,9 @@ public class Project {
      */
     public static Project empty() {
         Project project = new Project();
-        project.name = "???";
+        project.source = "???";
 
         return project;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
     }
 
     public String getSource() {
@@ -55,8 +45,7 @@ public class Project {
 
         Project project = (Project) o;
 
-        if (!name.equals(project.name)) return false;
-        if (source != null ? !source.equals(project.source) : project.source != null) return false;
+        if (!source.equals(project.source)) return false;
         if (target != null ? !target.equals(project.target) : project.target != null) return false;
 
         return true;
@@ -64,15 +53,14 @@ public class Project {
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + (source != null ? source.hashCode() : 0);
+        int result = source.hashCode();
         result = 31 * result + (target != null ? target.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return name;
+        return source;
     }
 
 }

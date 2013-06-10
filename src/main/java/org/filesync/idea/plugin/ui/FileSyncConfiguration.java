@@ -102,13 +102,11 @@ public class FileSyncConfiguration implements Configurable {
     }
 
     public void setData(Project data) {
-        jProjectName.setText(data.getName());
         jProjectSource.setText(data.getSource());
         jProjectTarget.setText(data.getTarget());
     }
 
     private void clearData() {
-        jProjectName.setText("");
         jProjectSource.setText("");
         jProjectTarget.setText("");
     }
@@ -125,7 +123,6 @@ public class FileSyncConfiguration implements Configurable {
                 if (selectedFile != null) {
                     LOGGER.info("Select source directory " + selectedFile.toString());
                     Project selectedProject = getSelectedProject();
-                    selectedProject.setName(selectedFile.getName());
                     selectedProject.setSource(selectedFile.toString());
                     setData(selectedProject);
                 }
@@ -163,7 +160,7 @@ public class FileSyncConfiguration implements Configurable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (hasSelectedProject()) {
-                    LOGGER.info("Remove project " + getSelectedProject().getName());
+                    LOGGER.info("Remove project " + getSelectedProject());
 
                     modified = true;
                     removeAndSelectNextElement();
@@ -193,7 +190,7 @@ public class FileSyncConfiguration implements Configurable {
             public void valueChanged(ListSelectionEvent e) {
                 if (hasSelectedProject()) {
                     Project selectedValue = getSelectedProject();
-                    LOGGER.info("Select project " + selectedValue.getName());
+                    LOGGER.info("Select project " + selectedValue);
 
                     setData(selectedValue);
                     checkOtherComponentsState();
