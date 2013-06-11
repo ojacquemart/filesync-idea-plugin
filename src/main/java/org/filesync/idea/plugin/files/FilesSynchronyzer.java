@@ -19,21 +19,24 @@ import java.util.List;
 public class FilesSynchronyzer {
 
     public static void sync() {
-        DataContext dataContext = DataManager.getInstance().getDataContext();
-        com.intellij.openapi.project.Project currentProject = DataKeys.PROJECT.getData(dataContext);
 
-        Task.Backgroundable backgroundable = new Task.Backgroundable(currentProject, FileSyncPlugin.PLUGIN_DISPLAY_NAME) {
-            @Override
-            public void run(@NotNull ProgressIndicator progressIndicator) {
-                List<Project> projects = FileSyncSettings.getInstance().getProjects();
-                for (Project project : projects) {
-                    // TODO finish proper sync checking paths.
-                    progressIndicator.setText("Synchronizing " + project.getSource() + "...");
-                    doSync(project);
+//        synchronized (FilesSynchronyzer.class) {
+            DataContext dataContext = DataManager.getInstance().getDataContext();
+            com.intellij.openapi.project.Project currentProject = DataKeys.PROJECT.getData(dataContext);
+
+            Task.Backgroundable backgroundable = new Task.Backgroundable(currentProject, FileSyncPlugin.PLUGIN_DISPLAY_NAME) {
+                @Override
+                public void run(@NotNull ProgressIndicator progressIndicator) {
+                    List<Project> projects = FileSyncSettings.getInstance().getProjects();
+                    for (Project project : projects) {
+                        // TODO finish proper sync checking paths.
+                        progressIndicator.setText("Synchronizing " + project.getSource() + "...");
+                        doSync(project);
+                    }
                 }
-            }
-        };
-        backgroundable.queue();
+            };
+            backgroundable.queue();
+//        }
     }
 
     static void doSync(Project project) {

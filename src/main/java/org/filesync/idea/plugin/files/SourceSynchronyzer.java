@@ -55,8 +55,8 @@ public class SourceSynchronyzer implements FileVisitor<Path> {
                 LOGGER.debug("Copying new file " + file);
                 Files.copy(file, targetFile);
             }
-        } catch (IOException x) {
-            LOGGER.error("Error during copying " + file);
+        } catch (IOException e) {
+            LOGGER.error("Error during copying " + file, e);
         }
 
         return FileVisitResult.CONTINUE;
@@ -75,11 +75,11 @@ public class SourceSynchronyzer implements FileVisitor<Path> {
         return FileVisitResult.CONTINUE;
     }
 
-    public FileVisitResult visitFileFailed(Path file, IOException exc) {
-        if (exc instanceof FileSystemLoopException) {
-            LOGGER.error("Cycle detected: " + file);
+    public FileVisitResult visitFileFailed(Path file, IOException e) {
+        if (e instanceof FileSystemLoopException) {
+            LOGGER.error("Cycle detected: " + file, e);
         } else {
-            LOGGER.error("Unable to copy: " + file, exc);
+            LOGGER.error("Unable to copy: " + file, e);
         }
         return FileVisitResult.CONTINUE;
     }

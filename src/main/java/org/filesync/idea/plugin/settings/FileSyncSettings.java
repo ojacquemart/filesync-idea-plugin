@@ -70,7 +70,7 @@ public class FileSyncSettings implements PersistentStateComponent<Element> {
             }
         }
         catch (Exception e) {
-            LOGGER.error("Error happened while loading github settings: " + e);
+            LOGGER.error("Error while loading settings", e);
         }
     }
 
