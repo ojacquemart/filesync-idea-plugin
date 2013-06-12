@@ -3,6 +3,7 @@ package org.filesync.idea.plugin.files;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import org.filesync.idea.plugin.FileSyncPlugin;
@@ -17,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Synchronyzer {
+
+    private static final Logger LOGGER = Logger.getInstance(Synchronyzer.class);
 
     public static void sync() {
         DataContext dataContext = DataManager.getInstance().getDataContext();
@@ -41,11 +44,12 @@ public class Synchronyzer {
 
         SourceCopier sourceCopier = new SourceCopier(source, target);
         TargetCleaner targetCleaner = new TargetCleaner(source, target);
+
         try {
             Files.walkFileTree(source, sourceCopier);
             Files.walkFileTree(target, targetCleaner);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Error during " + project.getSource() + " synchronization", e);
         }
     }
 
