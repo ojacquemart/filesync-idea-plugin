@@ -27,7 +27,6 @@ public class Synchronyzer {
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 List<Project> projects = Settings.getInstance().getProjects();
                 for (Project project : projects) {
-                    // TODO finish proper sync checking paths.
                     progressIndicator.setText("Synchronizing " + project.getSource() + "...");
                     doSync(project);
                 }
