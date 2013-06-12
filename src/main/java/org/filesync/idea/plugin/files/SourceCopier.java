@@ -7,13 +7,14 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 
-public class SourceSynchronyzer implements FileVisitor<Path> {
+public class SourceCopier implements FileVisitor<Path> {
 
-    private static final Logger LOGGER = Logger.getInstance(SourceSynchronyzer.class);
+    private static final Logger LOGGER = Logger.getInstance(SourceCopier.class);
+
     private final Path source;
     private final Path target;
 
-    public SourceSynchronyzer(Path source, Path target) {
+    public SourceCopier(Path source, Path target) {
         this.source = source;
         this.target = target;
     }

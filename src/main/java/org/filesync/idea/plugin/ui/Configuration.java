@@ -4,7 +4,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import org.filesync.idea.plugin.FileSyncPlugin;
-import org.filesync.idea.plugin.settings.FileSyncSettings;
+import org.filesync.idea.plugin.settings.Settings;
 import org.filesync.idea.plugin.settings.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
@@ -17,13 +17,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Collections;
 
-public class FileSyncConfiguration implements Configurable {
+public class Configuration implements Configurable {
 
-    private static final Logger LOGGER = Logger.getInstance(FileSyncConfiguration.class);
+    private static final Logger LOGGER = Logger.getInstance(Configuration.class);
 
     private JPanel jContainer;
     private JList jProjects;
-    private JTextField jProjectName;
     private JTextField jProjectSource;
     private JTextField jProjectTarget;
     private JButton jBtnProjectRemove;
@@ -36,7 +35,7 @@ public class FileSyncConfiguration implements Configurable {
 
     private boolean modified = false;
 
-    public FileSyncConfiguration() {
+    public Configuration() {
         init();
     }
 
@@ -55,7 +54,7 @@ public class FileSyncConfiguration implements Configurable {
 
     private void initModel() {
         jProjectsModel = new DefaultListModel<Project>();
-        FileSyncSettings settings = FileSyncSettings.getInstance();
+        Settings settings = Settings.getInstance();
         for (Project project : settings.getProjects()) {
             jProjectsModel.addElement(project);
         }
@@ -244,7 +243,7 @@ public class FileSyncConfiguration implements Configurable {
     @Override
     public void apply() throws ConfigurationException {
         LOGGER.info("Apply configuration");
-        FileSyncSettings settings = FileSyncSettings.getInstance();
+        Settings settings = Settings.getInstance();
         settings.clear();
         settings.setProjects(Collections.list(jProjectsModel.elements()));
     }

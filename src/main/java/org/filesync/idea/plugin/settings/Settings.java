@@ -11,12 +11,12 @@ import java.util.List;
 @State(
         name = "ConfigPersistentService",
         storages = {
-            @Storage(file = StoragePathMacros.APP_CONFIG + "/filesync_settings.xml")
+                @Storage(file = StoragePathMacros.APP_CONFIG + "/filesync_settings.xml")
         }
 )
-public class FileSyncSettings implements PersistentStateComponent<Element> {
+public class Settings implements PersistentStateComponent<Element> {
 
-    private static final Logger LOGGER = Logger.getInstance(FileSyncSettings.class);
+    private static final Logger LOGGER = Logger.getInstance(Settings.class);
 
     private static final String ELEMENT_ROOT = "ROOT";
     private static final String ELEMENT_PROJECTS = "PROJECTS";
@@ -26,40 +26,42 @@ public class FileSyncSettings implements PersistentStateComponent<Element> {
 
     private List<Project> projects = new ArrayList<Project>();
 
-    public static FileSyncSettings getInstance(){
-        return ServiceManager.getService(FileSyncSettings.class);
+    public static Settings getInstance() {
+        return ServiceManager.getService(Settings.class);
+    }
+
+    private static Element createElement(Project project) {
+        Element element = new Element(ELEMENT_PROJECT);
+        element.setAttribute(ELEMENT_PRJ_SOURCE, project.getSource());
+        element.setAttribute(ELEMENT_PRJ_TARGET, project.getTarget());
+
+        return element;
     }
 
     public Element getState() {
-        LOGGER.info("Getting state");
+        LOGGER.info("Saving settings");
 
         final Element eltRoot = new Element(ELEMENT_ROOT);
 
         try {
-            Element eltDirectories = new Element(ELEMENT_PROJECTS);
-            for (Project directory : projects) {
-                if (directory.getSource() != null) {
-                    LOGGER.info("Adding " + directory);
-
-                    Element eltDir = new Element(ELEMENT_PROJECT);
-                    eltDir.setAttribute(ELEMENT_PRJ_SOURCE, directory.getSource());
-                    eltDir.setAttribute(ELEMENT_PRJ_TARGET, directory.getTarget());
-
-                    eltDirectories.addContent(eltDir);
-                }
+            Element eltProjects = new Element(ELEMENT_PROJECTS);
+            for (Project project : projects) {
+                LOGGER.info("Adding " + project);
+                eltProjects.addContent(createElement(project));
             }
-            eltRoot.addContent(eltDirectories);
+
+            eltRoot.addContent(eltProjects);
         } catch (Exception e) {
-            LOGGER.error("Error during getting state...", e);
+            LOGGER.error("Error during saving settings...", e);
         }
 
         return eltRoot;
     }
 
     public void loadState(@NotNull Element element) {
-        try {
-            LOGGER.info("Loading state");
+        LOGGER.info("Loading state");
 
+        try {
             for (Element project : (List<Element>) element.getChildren(ELEMENT_PROJECTS)) {
                 for (Object object : project.getChildren(ELEMENT_PROJECT)) {
                     Element elt = (Element) object;
@@ -68,12 +70,10 @@ public class FileSyncSettings implements PersistentStateComponent<Element> {
                     addProject(source, target);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Error while loading settings", e);
         }
     }
-
 
     private void addProject(String source, String target) {
         LOGGER.info("Adding dir source " + source + " and target " + target);
